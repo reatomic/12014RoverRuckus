@@ -313,9 +313,9 @@ public class LeagueCrater extends LinearOpMode {
      * Dump the team marker
      */
     public void dumpMarker() {
-        robot.intake.setPower(-1);
+        robot.servoIntake.setPower(-1);
         sleep(1000);
-        robot.intake.setPower(0);
+        robot.servoIntake.setPower(0);
     }
 
     public void lowerIntake(){
@@ -325,9 +325,9 @@ public class LeagueCrater extends LinearOpMode {
     }
 
     public void useIntake(){
-        robot.intake.setPower(-1);
+        robot.servoIntake.setPower(-1);
         sleep(8000);
-        robot.intake.setPower(0);
+        robot.servoIntake.setPower(0);
     }
 
     /**
