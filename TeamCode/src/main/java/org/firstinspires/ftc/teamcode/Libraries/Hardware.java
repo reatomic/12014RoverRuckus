@@ -14,7 +14,7 @@ public class Hardware
     /* Public OpMode members. */
 
     //Motors
-    public DcMotor frontLeft, backLeft, frontRight, backRight, hangElevator, intakeElevator, intakeAdjust, intake, ledLights = null;
+    public DcMotor frontLeft, backLeft, frontRight, backRight, hangElevator, intakeElevator, intakeAdjust, ledLights = null;
 
     //Servos
     public CRServo servoIntake;
@@ -42,11 +42,10 @@ public class Hardware
         hangElevator = hwMap.get(DcMotor.class, "hangElevator");
         intakeElevator = hwMap.get(DcMotor.class, "intakeElevator");
         intakeAdjust = hwMap.get(DcMotor.class, "intakeAdjust");
-        intake = hwMap.get(DcMotor.class, "intake");
         ledLights = hwMap.get(DcMotor.class, "ledLights");
 
         //Servo hardware mapping
-        servoIntake = hwMap.get(CRServo.class, "teamMarker");
+        servoIntake = hwMap.get(CRServo.class, "intake");
 
         //Sensor hardware mapping
 
@@ -58,7 +57,6 @@ public class Hardware
         hangElevator.setPower(0);
         intakeElevator.setPower(0);
         intakeAdjust.setPower(0);
-        intake.setPower(0);
         ledLights.setPower(0);
         //Continuous Servo set powers
 
@@ -70,7 +68,6 @@ public class Hardware
         hangElevator.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         intakeElevator.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         intakeAdjust.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
     }
 }
