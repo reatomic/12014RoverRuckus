@@ -16,8 +16,9 @@ import org.firstinspires.ftc.teamcode.Libraries.FireBot;
 public class FinalTeleOp extends OpMode {
 
     /* Declare OpMode members. */
-    FireBot firebot = new FireBot();
-    Hardware robot = new Hardware();
+
+    private FireBot firebot = new FireBot();
+    private Hardware robot = new Hardware();
 
     /* TeleOp Initialization */
     @Override
@@ -43,9 +44,6 @@ public class FinalTeleOp extends OpMode {
 
         //Joystick intialization and conditioning
         //original configuration: db: 0 , off: 0.05 , gain: 0.9
-        double gamepad1LeftY = firebot.joystick_conditioning(gamepad1.left_stick_y, 0, 0.05, 0.9);
-        double gamepad1LeftX = firebot.joystick_conditioning(gamepad1.left_stick_x, 0, 0.05, 0.9);
-        double gamepad1RightX = firebot.joystick_conditioning(gamepad1.right_stick_x, 0, 0.05, 0.9);
         double gamepad2LeftY = firebot.joystick_conditioning(gamepad2.left_stick_y, 0, 0.05, 0.9);
         double intakeAdjustPower = firebot.gamepad_conditioning(gamepad2.right_stick_y, 0, 0.05, 0.9);
 
@@ -65,12 +63,12 @@ public class FinalTeleOp extends OpMode {
 
         //Mecanum values
         double maxPower = 0.6; //Maximum power for power range
-        double yMove = gamepad1LeftY; //Y-Axis movement
-        double xMove = gamepad1LeftX; //X-Axis movement
-        double cMove = gamepad1RightX; //Rotating-Axis movement
-        double frontLeftPower = 0; //Front Left motor power
+        double yMove = firebot.joystick_conditioning(gamepad1.left_stick_y, 0, 0.05, 0.9);
+        double xMove = firebot.joystick_conditioning(gamepad1.left_stick_x, 0, 0.05, 0.9);
+        double cMove = firebot.joystick_conditioning(gamepad1.right_stick_x, 0, 0.05, 0.9);
+        double frontLeftPower; //Front Left motor power
         double frontRightPower = 0; //Front Right motor power
-        double backLeftPower = 0; //Back Left motor power
+        double backLeftPower; //Back Left motor power
         double backRightPower = 0; //Back Right motor power
 
         //If statement to prevent power from being sent to the same motor from multiple sources
@@ -142,24 +140,24 @@ public class FinalTeleOp extends OpMode {
 
 
         //Setting power to manipulators
-        double intake = gamepad2RightTrigger;
-        double outtake = -gamepad2LeftTrigger;
+        // intake = gamepad2RightTrigger;
+        // outtake = -gamepad2LeftTrigger;
 
         robot.intakeElevator.setPower(gamepad2LeftY);
         robot.intakeAdjust.setPower(intakeAdjustPower);
 
         //Setting power to intake
         //Contingency against loop error
-        if (intake > 0){
-            robot.servoIntake.setPower(intake);
+        if (gamepad2RightTrigger > 0){
+            robot.servoIntake.setPower(gamepad2RightTrigger);
 
         }
         else{
-            robot.servoIntake.setPower(outtake);
+            robot.servoIntake.setPower(-gamepad2LeftTrigger);
 
         }
 
-        if(frontRightPower > 0 )
+        if(frontRightPower > 0 && backRightPower > 0)
         {
             robot.ledLights.setPower(frontRightPower * .5);
         }
