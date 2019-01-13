@@ -47,7 +47,7 @@ public class FinalTeleOp extends OpMode {
         double gamepad1LeftX = firebot.joystick_conditioning(gamepad1.left_stick_x, 0, 0.05, 0.9);
         double gamepad1RightX = firebot.joystick_conditioning(gamepad1.right_stick_x, 0, 0.05, 0.9);
         double gamepad2LeftY = firebot.joystick_conditioning(gamepad2.left_stick_y, 0, 0.05, 0.9);
-        double hangElevatorPower = firebot.gamepad_conditioning(gamepad2.right_stick_y, 0, 0.05, 0.9);
+        double intakeAdjustPower = firebot.gamepad_conditioning(gamepad2.right_stick_y, 0, 0.05, 0.9);
 
         //Trigger initialization and conditioning
         double gamepad1RightTrigger = firebot.gamepad_conditioning(gamepad1.right_trigger, 0, 0.05, 0.9);
@@ -133,11 +133,11 @@ public class FinalTeleOp extends OpMode {
         }
 
         if (dpadUp2 || dpadDown2){
-            if (dpadUp2){ robot.intakeAdjust.setPower(0.8); }
-            if (dpadDown2){ robot.intakeAdjust.setPower(-0.8); }
+            if (dpadUp2){ robot.hangElevator.setPower(0.8); }
+            if (dpadDown2){ robot.hangElevator.setPower(-0.8); }
         }
 
-        else { robot.intakeAdjust.setPower(0); }
+        else { robot.hangElevator.setPower(0); }
 
 
 
@@ -146,7 +146,7 @@ public class FinalTeleOp extends OpMode {
         double outtake = -gamepad2LeftTrigger;
 
         robot.intakeElevator.setPower(gamepad2LeftY);
-        robot.hangElevator.setPower(hangElevatorPower);
+        robot.intakeAdjust.setPower(intakeAdjustPower);
 
         //Setting power to intake
         //Contingency against loop error
