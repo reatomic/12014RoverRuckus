@@ -62,7 +62,7 @@ public class FinalTeleOp extends OpMode {
 
 
         //Mecanum values
-        double maxPower = 0.6; //Maximum power for power range
+        double maxPower = 0.725; //Maximum power for power range
         double yMove = firebot.joystick_conditioning(gamepad1.left_stick_y, 0, 0.05, 0.9);
         double xMove = firebot.joystick_conditioning(gamepad1.left_stick_x, 0, 0.05, 0.9);
         double cMove = firebot.joystick_conditioning(gamepad1.right_stick_x, 0, 0.05, 0.9);
