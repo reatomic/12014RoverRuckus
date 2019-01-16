@@ -233,7 +233,7 @@ public class FinalCrater extends LinearOpMode {
     /*
      * raiseRobot lowers the robots arm to it's starting position thus raising the robot in the air if it is hooked
      */
-    public void raiseRobot() {
+    private void raiseRobot() {
         encoderHang(0.8, 0, 8);
         sleep(200);
     }
