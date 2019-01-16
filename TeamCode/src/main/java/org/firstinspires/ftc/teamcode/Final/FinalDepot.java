@@ -4,7 +4,6 @@ package org.firstinspires.ftc.teamcode.Final;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -18,7 +17,7 @@ import org.firstinspires.ftc.teamcode.Libraries.Hardware;
 
 import java.util.List;
 
-/**
+/*
  * This 2018-2019 OpMode illustrates the basics of using the TensorFlow Object Detection API to
  * determine the position of the gold and silver minerals.
  *
@@ -32,7 +31,7 @@ import java.util.List;
 @Disabled
 public class FinalDepot extends LinearOpMode {
 
-    Hardware robot = new Hardware();
+    private Hardware robot = new Hardware();
 
     private static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";
     private static final String LABEL_GOLD_MINERAL = "Gold Mineral";
@@ -53,13 +52,13 @@ public class FinalDepot extends LinearOpMode {
      */
     private static final String VUFORIA_KEY = "AeWbHOX/////AAABmU9GHfAlN0CJgNed4l/4qrseJ0TsGVFEMRaWpMvpOi5s8CW0iiayYB5YkoDgiqFkJexDQsxfRIVpnA+iCCsrYqZXBTIu66lWASvyynGsattVV49V5Bp+BRuxywn0m6pnJRXFlwjnvgHR7xoUrRpE6Pwir0lIlpUIBJREYw9uMc6eTL3yedJstdgV40zwUOwPzwe++1GQ+34JISHpnIZ4xPca+uAtCPje1h3XeR1PP/HHk1/2tNhKz4XVYtYVq5+6ev/8Ca+D9t9j5wXSvi3FOSZmCPVICYO+vWGeEFzeWxmvC34mAPZoZfwGVcz4HYgdRl4tJiIC19VSuW+7iFX/7/GOI/TPFNnnz3EUJOTfFQiy";
     /**
-     * {@link #vuforia} is the variable we will use to store our instance of the Vuforia
+     * #vuforia is the variable we will use to store our instance of the Vuforia
      * localization engine.
      */
     private VuforiaLocalizer vuforia;
 
     /**
-     * {@link #tfod} is the variable we will use to store our instance of the Tensor Flow Object
+     * #tfod is the variable we will use to store our instance of the Tensor Flow Object
      * Detection engine.
      */
     private TFObjectDetector tfod;
@@ -72,10 +71,10 @@ public class FinalDepot extends LinearOpMode {
 
     private String sampleLocation = "UNKNOWN";
 
-    static final double COUNTS_PER_MOTOR_REV = 1120;
-    static final double DRIVE_GEAR_REDUCTION = 1.0;
-    static final double WHEEL_DIAMETER_INCHES = 6;
-    static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.14159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211706798214808651328230664709384460955058223172535940812848111745028410270193852110555964462294895493038196442881097566593344612847564823378678316527120190914564856692346034861045432664821339360726024914127372458700660631558817488152092096282925409171536436789259036001133053054882046652138414695194151160943305727036575959195309218611738193261179310511854807446237996274956735188575272489122793818301194912983367336244065664308602139494639522473719070217986094370277053921717629317675238467481846766940513200056812714526356082778577134275778960917363717872146844090122495343014654958537105079227968925892354201995611212902196086403441815981362977477130996051870721134999999837297804995105973173281609631859502445945534690830264252230825334468503526193118817101000313783875288658753320838142061717766914730359825349042875546873115956286388235378759375195778185778053217122680661300192787661119590921642019893809525720106548586327886593615338182796823030195203530185296899577362259941389124972177528347913151557485724245415069595082953311686172785588907509838175463746493931925506040092770167113900984882401285836160356370766010471018194295559619894676783744944825537977472684710404753464620804668425906949129331367702898915210475216205696602405803815019351125338243003558764024749647326391419927260426992279678235478163600934172164121992458631503028618297455570674983850549458858692699569092721079750930295532116534498720275596023648066549911988183479775356636980742654252786255181841757467289097777279);
+    private static final double COUNTS_PER_MOTOR_REV = 1120;
+    private static final double DRIVE_GEAR_REDUCTION = 1.0;
+    private static final double WHEEL_DIAMETER_INCHES = 6;
+    private static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.14159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211706798214808651328230664709384460955058223172535940812848111745028410270193852110555964462294895493038196442881097566593344612847564823378678316527120190914564856692346034861045432664821339360726024914127372458700660631558817488152092096282925409171536436789259036001133053054882046652138414695194151160943305727036575959195309218611738193261179310511854807446237996274956735188575272489122793818301194912983367336244065664308602139494639522473719070217986094370277053921717629317675238467481846766940513200056812714526356082778577134275778960917363717872146844090122495343014654958537105079227968925892354201995611212902196086403441815981362977477130996051870721134999999837297804995105973173281609631859502445945534690830264252230825334468503526193118817101000313783875288658753320838142061717766914730359825349042875546873115956286388235378759375195778185778053217122680661300192787661119590921642019893809525720106548586327886593615338182796823030195203530185296899577362259941389124972177528347913151557485724245415069595082953311686172785588907509838175463746493931925506040092770167113900984882401285836160356370766010471018194295559619894676783744944825537977472684710404753464620804668425906949129331367702898915210475216205696602405803815019351125338243003558764024749647326391419927260426992279678235478163600934172164121992458631503028618297455570674983850549458858692699569092721079750930295532116534498720275596023648066549911988183479775356636980742654252786255181841757467289097777279);
 
 
     @Override
@@ -98,7 +97,7 @@ public class FinalDepot extends LinearOpMode {
             telemetry.addData("Sorry!", "This device is not compatible with TFOD");
         }
 
-        /** Wait for the game to begin */
+        /* Wait for the game to begin */
         waitForStart();
 
         resetStartTime();
@@ -110,10 +109,11 @@ public class FinalDepot extends LinearOpMode {
         robot.hangElevator.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         /* Step 1: Lower Robot */
-        //lowerRobot();
+        lowerRobot();
+        sleep(30000);
 
         if (opModeIsActive()) {
-            /** Activate Tensor Flow Object Detection. */
+            /* Activate Tensor Flow Object Detection. */
             if (tfod != null) {
                 tfod.activate();
                 sleep(2000);
@@ -230,7 +230,7 @@ public class FinalDepot extends LinearOpMode {
         // Loading trackables is not necessary for the Tensor Flow Object Detection engine.
     }
 
-    /**
+    /*
      * Initialize the Tensor Flow Object Detection engine.
      */
     private void initTfod() {
@@ -241,95 +241,95 @@ public class FinalDepot extends LinearOpMode {
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_GOLD_MINERAL, LABEL_SILVER_MINERAL);
     }
 
-    /**
+    /*
      * raiseRobot lowers the robots arm to it's starting position thus raising the robot in the air if it is hooked
      */
-    public void raiseRobot() {
-        encoderHang(0.5, 0, 8);
-        sleep(200);
-    }
+//    private void raiseRobot() {
+//        encoderHang(0.5, 0, 8);
+//        sleep(200);
+//    }
 
-    /**
+    /*
      * lowerRobot raises the robots arm to its hanging position thus lowering the robot if it is hooked
      */
-    public void lowerRobot() {
+    private void lowerRobot() {
         encoderHang(0.5, -13200, 10);
         sleep(200);
     }
 
-    /**
+    /*
      * forward moves the robot forward at the prescribed speed for the prescribed distance
      *
      * @param spd
      * @param fwd
      */
-    public void forward(double spd, double fwd) {
+    private void forward(double spd, double fwd) {
         encoderDrive(spd, fwd, fwd, 10.0);
         sleep(200);
     }
 
-    /**
+    /*
      * backward moves the robot backward at the prescribed speed for the prescribed distance
      *
      * @param spd
      * @param back
      */
-    public void backward(double spd, double back) {
+    private void backward(double spd, double back) {
         encoderDrive(spd, -back, -back, 5.0);
         sleep(200);
     }
 
-    /**
+    /*
      * turnRight turns the robot right at the prescribed speed for the prescribed distance
      *
      * @param spd
      * @param turn
      */
-    public void turnRight(double spd, double turn) {
+    private void turnRight(double spd, double turn) {
         encoderDrive(spd, turn, -turn, 5.0);
         sleep(200);
     }
 
-    /**
+    /*
      * turnLeft turns the robot right at the prescribed speed for the prescribed distance
      *
      * @param spd
      * @param turn
      */
-    public void turnLeft(double spd, double turn) {
+    private void turnLeft(double spd, double turn) {
         encoderDrive(spd, -turn, turn, 5.0);
         sleep(200);
     }
 
-    /**
+    /*
      * Dump the team marker
      */
-    public void dumpMarker() {
+    private void dumpMarker() {
         robot.servoIntake.setPower(-1);
         sleep(3500);
         robot.servoIntake.setPower(0);
     }
 
-    /**
+    /*
      * Lowers intake **DEPRECATED**
      */
-    public void lowerIntake(){
-        robot.intakeElevator.setPower(0.4);
-        sleep(2500);
-        robot.intakeElevator.setPower(0);
-    }
+//    private void lowerIntake(){
+//        robot.intakeElevator.setPower(0.4);
+//        sleep(2500);
+//        robot.intakeElevator.setPower(0);
+//    }
 
-    /**
+    /*
      * Powers intake for use in crater or team marker
      *
      */
-    public void useIntake(){
-        robot.servoIntake.setPower(-1);
-        sleep(8000);
-        robot.servoIntake.setPower(0);
-    }
+//    private void useIntake(){
+//        robot.servoIntake.setPower(-1);
+//        sleep(8000);
+//        robot.servoIntake.setPower(0);
+//    }
 
-    /**
+    /*
      * encoderDrive allows the robot to go at a certain speed for a certain distance based
      * on ticks of the encoder. This allows the robot to be very precise in it's movements
      *
@@ -339,7 +339,7 @@ public class FinalDepot extends LinearOpMode {
      * @param timeoutS
      */
 
-    public void encoderDrive(double speed, double leftInches, double rightInches, double timeoutS) {
+    private void encoderDrive(double speed, double leftInches, double rightInches, double timeoutS) {
 
         int newFrontRightTarget;
         int newFrontLeftTarget;
@@ -419,7 +419,7 @@ public class FinalDepot extends LinearOpMode {
         }
     }
 
-    public void encoderHang(double speed, int hangTarget, double timeoutS) {
+    private void encoderHang(double speed, int hangTarget, double timeoutS) {
 
 
         hangProjected = telemetry.addData("Projected Hang Position", 0);
