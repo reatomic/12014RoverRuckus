@@ -57,6 +57,8 @@ public class FinalTeleOp extends OpMode {
         //D-Pad initialization
         boolean dpadUp = gamepad1.dpad_up; //Directional Pad: Up
         boolean dpadDown = gamepad1.dpad_down; //Directional Pad: Down
+        boolean dpadLeft = gamepad1.dpad_left;
+        boolean dpadRight = gamepad1.dpad_right;
         boolean dpadUp2 = gamepad2.dpad_up;
         boolean dpadDown2 = gamepad2.dpad_down;
 
@@ -96,22 +98,22 @@ public class FinalTeleOp extends OpMode {
         //Alternative inputs active for drive
         else {
             //Strafe left
-            if(gamepad1LeftTrigger > 0){
-                robot.frontLeft.setPower(gamepad1LeftTrigger);
-                robot.frontRight.setPower(gamepad1LeftTrigger);
-                robot.backLeft.setPower(-gamepad1LeftTrigger);
-                robot.backRight.setPower(-gamepad1LeftTrigger);
-            }
-
-            //Strafe right
-             if(gamepad1RightTrigger > 0){
-
-                    robot.frontLeft.setPower(-gamepad1RightTrigger);
-                    robot.frontRight.setPower(-gamepad1RightTrigger);
-                    robot.backLeft.setPower(gamepad1RightTrigger);
-                    robot.backRight.setPower(gamepad1RightTrigger);
-
-            }
+//            if(gamepad1LeftTrigger > 0){
+//                robot.frontLeft.setPower(gamepad1LeftTrigger);
+//                robot.frontRight.setPower(gamepad1LeftTrigger);
+//                robot.backLeft.setPower(-gamepad1LeftTrigger);
+//                robot.backRight.setPower(-gamepad1LeftTrigger);
+//            }
+//
+//            //Strafe right
+//             if(gamepad1RightTrigger > 0){
+//
+//                    robot.frontLeft.setPower(-gamepad1RightTrigger);
+//                    robot.frontRight.setPower(-gamepad1RightTrigger);
+//                    robot.backLeft.setPower(gamepad1RightTrigger);
+//                    robot.backRight.setPower(gamepad1RightTrigger);
+//
+//            }
 
             //Full forward power
             if(dpadUp){
@@ -128,15 +130,32 @@ public class FinalTeleOp extends OpMode {
                 robot.backLeft.setPower(1);
                 robot.backRight.setPower(-1);
             }
+
+            if(dpadLeft){
+                robot.frontLeft.setPower(1);
+                robot.frontRight.setPower(1);
+                robot.backLeft.setPower(-1);
+                robot.backRight.setPower(-1);
+            }
+
+            if(dpadRight) {
+                robot.frontLeft.setPower(-1);
+                robot.frontRight.setPower(-1);
+                robot.backLeft.setPower(1);
+                robot.backRight.setPower(1);
+            }
         }
 
-        if (dpadUp2 || dpadDown2){
-            if (dpadUp2){ robot.hangElevator.setPower(0.8); }
-            if (dpadDown2){ robot.hangElevator.setPower(-0.8); }
-        }
+//        if (dpadUp2 || dpadDown2){
+//            if (dpadUp2){ robot.hangElevator.setPower(0.8); }
+//            if (dpadDown2){ robot.hangElevator.setPower(-0.8); }
+//        }
+//
+//        else { robot.hangElevator.setPower(0); }
+//
 
-        else { robot.hangElevator.setPower(0); }
-
+        robot.hangElevator.setPower(gamepad1LeftTrigger);
+        robot.hangElevator.setPower(-gamepad1RightTrigger);
 
 
         //Setting power to manipulators
@@ -144,7 +163,7 @@ public class FinalTeleOp extends OpMode {
         // outtake = -gamepad2LeftTrigger;
 
         robot.intakeElevator.setPower(gamepad2LeftY);
-        robot.intakeAdjust.setPower(intakeAdjustPower);
+        robot.intakeAdjust.setPower(intakeAdjustPower * .5);
 
         //Setting power to intake
         //Contingency against loop error
@@ -159,9 +178,9 @@ public class FinalTeleOp extends OpMode {
 
         if(frontRightPower > 0 && backRightPower > 0)
         {
-            robot.ledLights.setPower(frontRightPower * .5);
+            robot.ledLights.setPower(frontRightPower * 1.4);
         }
-        else { robot.ledLights.setPower(0.2); }
+        else { robot.ledLights.setPower(0.75); }
 
 
 
