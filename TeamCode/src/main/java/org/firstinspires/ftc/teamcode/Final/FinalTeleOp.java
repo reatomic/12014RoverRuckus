@@ -153,9 +153,17 @@ public class FinalTeleOp extends OpMode {
 //
 //        else { robot.hangElevator.setPower(0); }
 //
+        if (gamepad1RightTrigger > 0){
+            robot.hangElevator.setPower(-gamepad1RightTrigger);
 
-        robot.hangElevator.setPower(gamepad1LeftTrigger);
-        robot.hangElevator.setPower(-gamepad1RightTrigger);
+        }
+        else{
+            robot.hangElevator.setPower(gamepad1LeftTrigger);
+
+        }
+
+
+
 
 
         //Setting power to manipulators
@@ -185,9 +193,9 @@ public class FinalTeleOp extends OpMode {
 
 
         //Find encoder ticks for hang
-        robot.hangElevator.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        telemetry.addData("Current Hang Position", robot.hangElevator.getCurrentPosition());
-        telemetry.update();
+//        robot.hangElevator.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        telemetry.addData("Current Hang Position", robot.hangElevator.getCurrentPosition());
+//        telemetry.update();
 
     }
 
