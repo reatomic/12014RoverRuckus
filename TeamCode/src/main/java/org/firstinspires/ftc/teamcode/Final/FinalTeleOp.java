@@ -48,8 +48,8 @@ public class FinalTeleOp extends OpMode {
         double intakeAdjustPower = firebot.gamepad_conditioning(gamepad2.right_stick_y, 0, 0.05, 0.9);
 
         //Trigger initialization and conditioning
-        double gamepad1RightTrigger = firebot.gamepad_conditioning(gamepad1.right_trigger, 0, 0.05, 0.9);
-        double gamepad1LeftTrigger = firebot.gamepad_conditioning(gamepad1.left_trigger, 0, 0.05, 0.9);
+        double gamepad1RightTrigger = gamepad1.right_trigger;
+        double gamepad1LeftTrigger = gamepad1.left_trigger;
         double gamepad2RightTrigger = firebot.gamepad_conditioning(gamepad2.right_trigger, 0, 0.05, 0.9);
         double gamepad2LeftTrigger = firebot.gamepad_conditioning(gamepad2.left_trigger, 0, 0.05, 0.9);
 
@@ -153,9 +153,17 @@ public class FinalTeleOp extends OpMode {
 //
 //        else { robot.hangElevator.setPower(0); }
 //
+        if (gamepad1RightTrigger > 0){
+            robot.hangElevator.setPower(-gamepad1RightTrigger);
 
-        robot.hangElevator.setPower(gamepad1LeftTrigger);
-        robot.hangElevator.setPower(-gamepad1RightTrigger);
+        }
+        else{
+            robot.hangElevator.setPower(gamepad1LeftTrigger);
+
+        }
+
+
+
 
 
         //Setting power to manipulators
@@ -163,7 +171,7 @@ public class FinalTeleOp extends OpMode {
         // outtake = -gamepad2LeftTrigger;
 
         robot.intakeElevator.setPower(gamepad2LeftY);
-        robot.intakeAdjust.setPower(intakeAdjustPower * .5);
+        robot.intakeAdjust.setPower(intakeAdjustPower);
 
         //Setting power to intake
         //Contingency against loop error
@@ -185,9 +193,9 @@ public class FinalTeleOp extends OpMode {
 
 
         //Find encoder ticks for hang
-        robot.hangElevator.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        telemetry.addData("Current Hang Position", robot.hangElevator.getCurrentPosition());
-        telemetry.update();
+//        robot.hangElevator.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        telemetry.addData("Current Hang Position", robot.hangElevator.getCurrentPosition());
+//        telemetry.update();
 
     }
 
