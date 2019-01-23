@@ -128,13 +128,13 @@ public class ExperimentalCrater extends LinearOpMode
         // and named "imu".
         imu = hardwareMap.get(BNO055IMU.class, "imu");
         imu.initialize(parameters);
-
+        robot.hangElevator.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         // Wait until we're told to go
         waitForStart();
         /* Step 1: Lower Robot */
         lowerRobot();
-        sleep(30000);
+
 
         if (opModeIsActive()) {
             /* Activate Tensor Flow Object Detection. */
@@ -198,28 +198,27 @@ public class ExperimentalCrater extends LinearOpMode
                         forward(.5, 6);
                         turnLeft(.4, 6.5);
                         strafeRight(.4, 16, 5);
-                        forward(1, 23);
+                        forward(.5, 30);
                         dumpMarker();
-                        backward(.8, 36);
+                        backward(.6, 40);
                         strafeRight(.4, 6, 4);
-                        backward(.6, 14);
+                        backward(.2, 2.2);
                         break;
 
                     case "LEFT":
                         forward(.2, 10);
-                        strafeLeft(.4, 8, 6);
-                        forward(.3, 8.5);
-                        backward(.3, 8.5);
+                        strafeLeft(.4, 8.2, 6);
+                        forward(.3, 10);
+                        backward(.3, 10);
                         turnLeft(.4, 12.25);
                         forward(.5, 5.5);
                         turnLeft(.4, 6.5);
                         strafeRight(.4, 14, 5);
-                        forward(.8, 26);
+                        forward(.6, 22);
                         dumpMarker();
-                        backward(.8, 38);
+                        backward(.6, 40);
                         strafeRight(.4, 6, 4);
-                        backward(.6, 14);
-
+                        backward(.2, 2.2);
                         break;
 
                     case "RIGHT":
@@ -233,14 +232,14 @@ public class ExperimentalCrater extends LinearOpMode
                         strafeRight(.4, 14, 5);
                         forward(.8, 20);
                         dumpMarker();
-                        backward(.8, 36);
+                        backward(.6, 40);
                         strafeRight(.4, 6, 4);
-                        backward(.6, 14);
+                        backward(.2, 2.2);
                         break;
                 }
 
                 /* End */
-                raiseRobot();
+                //raiseRobot();
                 sleep(30000);
             }
         }
@@ -285,7 +284,6 @@ public class ExperimentalCrater extends LinearOpMode
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_GOLD_MINERAL, LABEL_SILVER_MINERAL);
     }
-
 
     public double getHeading(){
         Orientation angles   = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
@@ -602,8 +600,8 @@ public class ExperimentalCrater extends LinearOpMode
      * Dump the team marker
      */
     private void dumpMarker() {
-        robot.servoIntake.setPower(-1);
-        sleep(3500);
+        robot.servoIntake.setPower(1);
+        sleep(3200);
         robot.servoIntake.setPower(0);
     }
 
@@ -814,7 +812,6 @@ public class ExperimentalCrater extends LinearOpMode
             robot.backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
     }
-
 //    public void strafeDrive(double speed, double distance, double angle, char direction) {
 //
 //        int     newFrontLeftTarget = 0;
