@@ -42,14 +42,14 @@ public class ExperimentalDepot extends LinearOpMode
 
     static final double     HEADING_THRESHOLD       = 1 ;      // As tight as we can make it with an integer gyro
     static final double     P_TURN_COEFF            = 0.05;     // Larger is more responsive, but also less stable
-    static final double     P_DRIVE_COEFF           = 0.05;     // Larger is more responsive, but also less stable
+    static final double     P_DRIVE_COEFF           = 0.4;     // Larger is more responsive, but also less stable
 
 //    static final double COUNTS_PER_MOTOR_REV = 1120;
 //    static final double DRIVE_GEAR_REDUCTION = 0.51;
 //    static final double WHEEL_DIAMETER_INCHES = 6;
 
     static final double COUNTS_PER_MOTOR_REV = 1120;
-    static final double DRIVE_GEAR_REDUCTION = 1.0;
+    static final double DRIVE_GEAR_REDUCTION = 0.51;
     static final double WHEEL_DIAMETER_INCHES = 6;
     static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.14159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211706798214808651328230664709384460955058223172535940812848111745028410270193852110555964462294895493038196442881097566593344612847564823378678316527120190914564856692346034861045432664821339360726024914127372458700660631558817488152092096282925409171536436789259036001133053054882046652138414695194151160943305727036575959195309218611738193261179310511854807446237996274956735188575272489122793818301194912983367336244065664308602139494639522473719070217986094370277053921717629317675238467481846766940513200056812714526356082778577134275778960917363717872146844090122495343014654958537105079227968925892354201995611212902196086403441815981362977477130996051870721134999999837297804995105973173281609631859502445945534690830264252230825334468503526193118817101000313783875288658753320838142061717766914730359825349042875546873115956286388235378759375195778185778053217122680661300192787661119590921642019893809525720106548586327886593615338182796823030195203530185296899577362259941389124972177528347913151557485724245415069595082953311686172785588907509838175463746493931925506040092770167113900984882401285836160356370766010471018194295559619894676783744944825537977472684710404753464620804668425906949129331367702898915210475216205696602405803815019351125338243003558764024749647326391419927260426992279678235478163600934172164121992458631503028618297455570674983850549458858692699569092721079750930295532116534498720275596023648066549911988183479775356636980742654252786255181841757467289097777279);
 
@@ -128,13 +128,13 @@ public class ExperimentalDepot extends LinearOpMode
         // and named "imu".
         imu = hardwareMap.get(BNO055IMU.class, "imu");
         imu.initialize(parameters);
+        robot.hangElevator.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
 
         // Wait until we're told to go
         waitForStart();
         /* Step 1: Lower Robot */
         lowerRobot();
-        sleep(30000);
 
         if (opModeIsActive()) {
             /* Activate Tensor Flow Object Detection. */
@@ -179,66 +179,63 @@ public class ExperimentalDepot extends LinearOpMode
                 /* Begin Auto Path Movement */
                 /*  */
                 /* Step 3. Turn the robot */
-                encoderDrive(0.5, 12, -12, 4);
-
-                /* Step 4. Square the robot up with the wall */
-                encoderDrive(0.2, -6, -6, 4);
+                encoderDrive(0.5, 22, -22, 4);
 
                 /* Step 5. Drive Forward to position to sample */
+                encoderDrive(0.5, -8, -8, 4);
 
                 runtime.reset();
                 /* Step 6. Sample the Mineral then return to position */
                 switch (sampleLocation) {
                     case "UNKNOWN":
                     case "CENTER":
-                        forward(.4,34 );
+                        //gyroDrive(.25, 55, 0);
+                        forward(.25,55 );
                         dumpMarker();
-                        forward(.15, 6);
-                        turnLeft(.4, 6.5);
-                        strafeRight(.4, 7, 6);
-                        strafeLeft(.4, 50, 6);
-                        turnRight(.4,  12);
-                        strafeLeft(.4, 4, 5);
-                        strafeRight(.2, 1,5);
-                        backward(.2, 6);
+                        backward(.4, 27);
+                        turnLeft(.3, 24);
+                        forward(0.5, 38);
+                        turnLeft(.3, 11);
+                        strafeRight(.3, 12, 3);
+                        forward(0.4, 18);
+
                         break;
 
                     case "LEFT":
-                        forward(.2, 10);
-                        turnLeft(0.4,6.5);
-                        forward(0.4, 20);
-                        strafeRight(.4, 6, 6);
-                        turnRight(0.2, 13);
-                        forward(.4, 9);
+                        forward(.2, 14);
+                        strafeLeft(.4, 19, 6);
+                        forward(.3, 50);
+                        turnRight(.3, 11);
+                        forward(.3, 5);
                         dumpMarker();
-                        backward(.4, 40);
-                        strafeLeft(.4, 4, 5);
-                        strafeRight(.2, 1,5);
-                        backward(.2, 6);
-//                        sleep(30000);
+                        backward(0.5, 50);
+                        turnLeft(0.5,48);
+                        strafeRight(.3, 12, 3);
+                        forward(0.3, 15);
+
                         break;
 
                     case "RIGHT":
-                        forward(.2, 10);
-                        turnRight(.4, 6.5);
-                        forward(.35, 23 );
-                        turnLeft(.6, 12.75);
-                        forward(.4, 12.5);
+                        forward(.2, 14);
+                        strafeRight(.4, 19, 6);
+                        forward(.3, 50);
+                        turnLeft(.3, 13);
+                        forward(.3, 5);
                         dumpMarker();
-                        forward(.4, 10);
-                        backward(.2, 2);
-                        strafeRight(.4, 6, 6);
-                        strafeLeft(.6, 5, 6);
-                        forward(.2, 2);
-                        strafeLeft(.6, 48, 6);
-                        turnRight(.4,  12);
-                        strafeLeft(.4, 5, 5);
-                        strafeRight(.2, 1,5);
-                        backward(.2, 2);
+                        forward(.4, 6);
+                        backward(.3, 3);
+                        strafeLeft(.3, 4, 3);
+                        turnLeft(.3, 15);
+                        forward(.3, 16);
+                        turnLeft(.3, 11.5);
+                        strafeRight(.3, 16, 3);
+                        forward(0.5, 45);
+                        forward(0.3, 20);
                         break;
                 }
 
                 /* End */
+                lowerArm();
                 raiseRobot();
                 sleep(30000);
             }
@@ -250,7 +247,6 @@ public class ExperimentalDepot extends LinearOpMode
         // Start the logging of measured acceleration
         imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
 
-        gyroDrive(0.3, 12, 0.0);
     }
 
     //Methods
@@ -410,13 +406,46 @@ public class ExperimentalDepot extends LinearOpMode
      *                   If a relative angle is required, add/subtract from current heading.
      */
     public void gyroTurn (double speed, double angle) {
-        // keep looping while we are still active, and not on heading.
-        while (opModeIsActive() && !onHeading(speed, angle, P_TURN_COEFF) ) {
-            // Update telemetry & Allow time for other processes to run.
-            telemetry.update();
+
+        double heading = 0;
+        char direction = 'n';
+
+        if(angle <= 0)
+        {direction = 'r';}
+        else if (angle >= 0)
+        {direction = 'l';}
+
+        if (opModeIsActive()){
+            // keep looping while we are still active, and not on heading.
+            while (opModeIsActive() && ((heading <= (angle - 0.5)) || (heading >= (angle + 0.5)))) {
+                Orientation angles   = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+                heading = angles.firstAngle;
+                telemetry.addData("Heading", heading);
+                telemetry.update();
+                // start motion.
+                if(direction == 'r') {
+                    speed = Range.clip(Math.abs(speed), 0.0, 1.0);
+                    robot.frontRight.setPower(-speed);
+                    robot.frontLeft.setPower(-speed);
+                    robot.backRight.setPower(-speed);
+                    robot.backLeft.setPower(-speed);
+                }
+                if(direction == 'l'){
+                    speed = Range.clip(Math.abs(speed), 0.0, 1.0);
+                    robot.frontRight.setPower(speed);
+                    robot.frontLeft.setPower(speed);
+                    robot.backRight.setPower(speed);
+                    robot.backLeft.setPower(speed);
+                }
+            }
+            robot.frontRight.setPower(0);
+            robot.frontLeft.setPower(0);
+            robot.backRight.setPower(0);
+            robot.backLeft.setPower(0);
+
+
         }
     }
-
     /**
      *  Method to obtain & hold a heading for a finite amount of time
      *  Move will stop once the requested time has elapsed
@@ -535,6 +564,12 @@ public class ExperimentalDepot extends LinearOpMode
         sleep(200);
     }
 
+    private void lowerArm() {
+        robot.intakeAdjust.setPower(1);
+        sleep(800);
+        robot.intakeAdjust.setPower(0);
+    }
+
     /*
      * forward moves the robot forward at the prescribed speed for the prescribed distance
      *
@@ -601,8 +636,8 @@ public class ExperimentalDepot extends LinearOpMode
      * Dump the team marker
      */
     private void dumpMarker() {
-        robot.servoIntake.setPower(-1);
-        sleep(3500);
+        robot.servoIntake.setPower(1);
+        sleep(3200);
         robot.servoIntake.setPower(0);
     }
 
