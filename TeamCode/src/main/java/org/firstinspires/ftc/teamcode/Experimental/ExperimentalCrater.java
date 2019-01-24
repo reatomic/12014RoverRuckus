@@ -214,11 +214,12 @@ public class ExperimentalCrater extends LinearOpMode
                         forward(.5, 5.5);
                         turnLeft(.4, 6.5);
                         strafeRight(.4, 14, 5);
-                        forward(.6, 22);
+                        forward(.6, 20);
                         dumpMarker();
-                        backward(.6, 40);
+                        backward(.6, 35);
+                        backward(.2, 5);
                         strafeRight(.4, 6, 4);
-                        backward(.2, 2.2);
+                        backward(.2, 4);
                         break;
 
                     case "RIGHT":
@@ -226,15 +227,15 @@ public class ExperimentalCrater extends LinearOpMode
                         strafeRight(.4, 8, 6);
                         forward(.3, 7.5);
                         backward(.3, 7.5);
-                        turnLeft(.4, 12.0);
+                        turnLeft(.4, 13.0);
                         forward(.5, 20);
                         turnLeft(.4, 6.5);
                         strafeRight(.4, 14, 5);
-                        forward(.8, 20);
+                        forward(.6, 24);
                         dumpMarker();
-                        backward(.6, 40);
+                        backward(.6, 35);
                         strafeRight(.4, 6, 4);
-                        backward(.2, 2.2);
+                        backward(.2, 5);
                         break;
                 }
 

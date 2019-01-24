@@ -193,9 +193,9 @@ public class FinalTeleOp extends OpMode {
 
 
         //Find encoder ticks for hang
-//        robot.hangElevator.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        telemetry.addData("Current Hang Position", robot.hangElevator.getCurrentPosition());
-//        telemetry.update();
+        robot.hangElevator.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        telemetry.addData("Current Hang Position", robot.hangElevator.getCurrentPosition());
+        telemetry.update();
 
     }
 
