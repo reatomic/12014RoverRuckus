@@ -82,7 +82,8 @@ public class GyroVertical extends LinearOpMode
         // Start the logging of measured acceleration
         imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
 
-        gyroDrive(0.3, 12, 0.0);
+//        gyroDrive(0.3, 12, 0.0);
+        gyroTurn(0.3, 179);
     }
 
     //Methods
@@ -122,14 +123,14 @@ public class GyroVertical extends LinearOpMode
         double  rightSpeed;
 
         // Ensure that the opmode is still active
-        if (opModeIsActive()) {
+            if (opModeIsActive()) {
 
-            // Determine new target position, and pass to motor controller
-            moveCounts = (int)(distance * COUNTS_PER_INCH);
-            newFrontLeftTarget = robot.frontLeft.getCurrentPosition() - moveCounts;
-            newFrontRightTarget = robot.frontRight.getCurrentPosition() + moveCounts;
-            newBackLeftTarget = robot.backLeft.getCurrentPosition() - moveCounts;
-            newBackRightTarget = robot.backRight.getCurrentPosition() + moveCounts;
+                // Determine new target position, and pass to motor controller
+                moveCounts = (int)(distance * COUNTS_PER_INCH);
+                newFrontLeftTarget = robot.frontLeft.getCurrentPosition() - moveCounts;
+                newFrontRightTarget = robot.frontRight.getCurrentPosition() + moveCounts;
+                newBackLeftTarget = robot.backLeft.getCurrentPosition() - moveCounts;
+                newBackRightTarget = robot.backRight.getCurrentPosition() + moveCounts;
 
             // Set Target and Turn On RUN_TO_POSITION
             robot.frontLeft.setTargetPosition(newFrontLeftTarget);
@@ -177,6 +178,7 @@ public class GyroVertical extends LinearOpMode
                 robot.backLeft.setPower(leftSpeed);
                 robot.backRight.setPower(rightSpeed);
 
+
                 // Display drive status for the driver.
                 telemetry.addData("Err/St",  "%5.1f/%5.1f",  error, steer);
                 telemetry.addData("Target",  "%7d: %7d: %7d: %7d ",      newFrontLeftTarget,  newFrontRightTarget, newBackLeftTarget,  newBackRightTarget);
@@ -211,11 +213,46 @@ public class GyroVertical extends LinearOpMode
      *                   0 = fwd. +ve is CCW from fwd. -ve is CW from forward.
      *                   If a relative angle is required, add/subtract from current heading.
      */
+
     public void gyroTurn (double speed, double angle) {
-        // keep looping while we are still active, and not on heading.
-        while (opModeIsActive() && !onHeading(speed, angle, P_TURN_COEFF) ) {
-            // Update telemetry & Allow time for other processes to run.
-            telemetry.update();
+
+        double heading = 0;
+        char direction = 'n';
+
+        if(angle <= 0)
+        {direction = 'r';}
+        else if (angle >= 0)
+        {direction = 'l';}
+
+        if (opModeIsActive()){
+            // keep looping while we are still active, and not on heading.
+            while (opModeIsActive() && ((heading <= (angle - 0.5)) || (heading >= (angle + 0.5)))) {
+                Orientation angles   = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+                heading = angles.firstAngle;
+                telemetry.addData("Heading", heading);
+                telemetry.update();
+                // start motion.
+                if(direction == 'r') {
+                    speed = Range.clip(Math.abs(speed), 0.0, 1.0);
+                    robot.frontRight.setPower(-speed);
+                    robot.frontLeft.setPower(-speed);
+                    robot.backRight.setPower(-speed);
+                    robot.backLeft.setPower(-speed);
+                }
+                if(direction == 'l'){
+                    speed = Range.clip(Math.abs(speed), 0.0, 1.0);
+                    robot.frontRight.setPower(speed);
+                    robot.frontLeft.setPower(speed);
+                    robot.backRight.setPower(speed);
+                    robot.backLeft.setPower(speed);
+                }
+            }
+            robot.frontRight.setPower(0);
+            robot.frontLeft.setPower(0);
+            robot.backRight.setPower(0);
+            robot.backLeft.setPower(0);
+
+
         }
     }
 
