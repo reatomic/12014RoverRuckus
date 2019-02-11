@@ -27,7 +27,7 @@ import java.util.List;
  * IMPORTANT: In order to use this OpMode, you need to obtain your own Vuforia license key as
  * is explained below.
  */
-@Autonomous(name = "League Championship Depot", group = "Coldbot")
+@Autonomous(name = "Griffith Crater", group = "Coldbot")
 @Disabled
 public class FinalCrater extends LinearOpMode {
 
@@ -109,7 +109,7 @@ public class FinalCrater extends LinearOpMode {
         robot.hangElevator.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         /* Step 1: Lower Robot */
-        lowerRobot();
+//        lowerRobot();
 
         if (opModeIsActive()) {
             /* Activate Tensor Flow Object Detection. */
@@ -166,32 +166,54 @@ public class FinalCrater extends LinearOpMode {
                 switch (sampleLocation) {
                     case "UNKNOWN":
                     case "CENTER":
-                        forward(1,1);
-                        backward(1, 1);
-                        turnLeft(1,1);
-                        turnRight(1,1);
-                        lowerIntake();
-                        useIntake();
+                        forward(.2, 19);
+                        backward(.2, 8);
+                        strafeLeft(.4, 8, 6);
+                        turnLeft(.4, 12.25);
+                        forward(.5, 6);
+                        turnLeft(.4, 6.5);
+                        strafeRight(.4, 16, 5);
+                        forward(.5, 30);
                         dumpMarker();
-                        sleep(30000);
+                        backward(.6, 30);
+                        turnLeft(.4, 27);
+                        forward(.4, 12);
+
                         break;
 
                     case "LEFT":
-                        forward(.9,.9);
-                        backward(.9,.9);
-                        turnLeft(.9,.9);
-                        turnRight(.9,.9);
-                        sleep(30000);
+                        forward(.2, 10);
+                        strafeLeft(.4, 8.2, 6);
+                        forward(.3, 10);
+                        backward(.3, 10);
+                        turnLeft(.4, 12.25);
+                        forward(.5, 5.5);
+                        turnLeft(.4, 6.5);
+                        strafeRight(.4, 17, 5);
+                        forward(.6, 22);
+                        dumpMarker();
+                        backward(.8, 32);
+                        turnLeft(.4, 27);
                         break;
 
                     case "RIGHT":
-
-                        sleep(30000);
+                        forward(.2, 10);
+                        strafeRight(.4, 8, 6);
+                        forward(.3, 7.5);
+                        backward(.3, 7.5);
+                        turnLeft(.4, 13.0);
+                        forward(.5, 20);
+                        turnLeft(.4, 6.5);
+                        strafeRight(.4, 17, 5);
+                        forward(.6, 24);
+                        dumpMarker();
+                        backward(.6, 30);
+                        turnLeft(.4, 27);
+                        forward(.4, 13);
                         break;
                 }
 
                 /* End */
-                raiseRobot();
                 sleep(30000);
             }
         }
@@ -199,6 +221,7 @@ public class FinalCrater extends LinearOpMode {
         if (tfod != null) {
             tfod.shutdown();
         }
+
     }
 
     /**
@@ -233,7 +256,7 @@ public class FinalCrater extends LinearOpMode {
     /*
      * raiseRobot lowers the robots arm to it's starting position thus raising the robot in the air if it is hooked
      */
-    private void raiseRobot() {
+    public void raiseRobot() {
         encoderHang(0.8, 0, 8);
         sleep(200);
     }
@@ -241,9 +264,15 @@ public class FinalCrater extends LinearOpMode {
     /*
      * lowerRobot raises the robots arm to its hanging position thus lowering the robot if it is hooked
      */
-    private void lowerRobot() {
-        encoderHang(0.5, -13200, 10);
+    public void lowerRobot() {
+        encoderHang(0.5, -6850, 10);
         sleep(200);
+    }
+
+    public void lowerArm() {
+        robot.intakeAdjust.setPower(1);
+        sleep(800);
+        robot.intakeAdjust.setPower(0);
     }
 
     /*
@@ -252,7 +281,7 @@ public class FinalCrater extends LinearOpMode {
      * @param spd
      * @param fwd
      */
-    private void forward(double spd, double fwd) {
+    public void forward(double spd, double fwd) {
         encoderDrive(spd, fwd, fwd, 10.0);
         sleep(200);
     }
@@ -263,7 +292,7 @@ public class FinalCrater extends LinearOpMode {
      * @param spd
      * @param back
      */
-    private void backward(double spd, double back) {
+    public void backward(double spd, double back) {
         encoderDrive(spd, -back, -back, 5.0);
         sleep(200);
     }
@@ -274,7 +303,7 @@ public class FinalCrater extends LinearOpMode {
      * @param spd
      * @param turn
      */
-    private void turnRight(double spd, double turn) {
+    public void turnRight(double spd, double turn) {
         encoderDrive(spd, turn, -turn, 5.0);
         sleep(200);
     }
@@ -285,38 +314,39 @@ public class FinalCrater extends LinearOpMode {
      * @param spd
      * @param turn
      */
-    private void turnLeft(double spd, double turn) {
+    public void turnLeft(double spd, double turn) {
         encoderDrive(spd, -turn, turn, 5.0);
         sleep(200);
     }
+    //
+//    public void strafeLeft(double spd, double strafe, double angle){
+//        strafeDrive(spd, strafe, angle, 'L');
+//
+//    }
+//
+//    public void strafeRight(double spd, double strafe, double angle){
+//        strafeDrive(spd, strafe, angle, 'R');
+//    }
+    public void strafeLeft(double spd, double strafe, double timeoutS){
+        strafeDrive(spd, strafe, strafe, -strafe, -strafe, timeoutS);
+
+    }
+
+    public void strafeRight(double spd, double strafe, double timeoutS){
+        strafeDrive(spd, -strafe, -strafe, strafe, strafe, timeoutS);
+    }
+
 
     /*
      * Dump the team marker
      */
-    private void dumpMarker() {
-        robot.servoIntake.setPower(-1);
-        sleep(3500);
-        robot.servoIntake.setPower(0);
+    public void dumpMarker() {
+        //robot.servoIntake.setPower(1);
+        sleep(3200);
+        // robot.servoIntake.setPower(0);
     }
 
-    /*
-     * Lowers intake **DEPRECATED**
-     */
-    private void lowerIntake(){
-        robot.intakeElevator.setPower(0.4);
-        sleep(2500);
-        robot.intakeElevator.setPower(0);
-    }
 
-    /*
-     * Powers intake for use in crater or team marker
-     *
-     */
-    private void useIntake(){
-        robot.servoIntake.setPower(-1);
-        sleep(8000);
-        robot.servoIntake.setPower(0);
-    }
 
     /*
      * encoderDrive allows the robot to go at a certain speed for a certain distance based
@@ -328,7 +358,7 @@ public class FinalCrater extends LinearOpMode {
      * @param timeoutS
      */
 
-    private void encoderDrive(double speed, double leftInches, double rightInches, double timeoutS) {
+    public void encoderDrive(double speed, double leftInches, double rightInches, double timeoutS) {
 
         int newFrontRightTarget;
         int newFrontLeftTarget;
@@ -408,7 +438,7 @@ public class FinalCrater extends LinearOpMode {
         }
     }
 
-    private void encoderHang(double speed, int hangTarget, double timeoutS) {
+    public void encoderHang(double speed, int hangTarget, double timeoutS) {
 
 
         hangProjected = telemetry.addData("Projected Hang Position", 0);
@@ -439,5 +469,71 @@ public class FinalCrater extends LinearOpMode {
             robot.hangElevator.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
 
+    }
+
+    public void strafeDrive(double speed, double frontLeftInches, double frontRightInches, double backLeftInches, double backRightInches, double timeoutS) {
+
+        int newFrontRightTarget;
+        int newFrontLeftTarget;
+        int newBackRightTarget;
+        int newBackLeftTarget;
+        encoderProjected = telemetry.addData("Projected Path", 0);
+        encoderCurrent = telemetry.addData("Current Path", 0);
+
+
+        // Ensure that the opmode is still active
+        if (opModeIsActive()) {
+
+            // Determine new target position, and pass to motor controller
+            newFrontRightTarget = robot.frontRight.getCurrentPosition() + (int) (frontRightInches * COUNTS_PER_INCH);
+            newFrontLeftTarget = robot.frontLeft.getCurrentPosition() + (int) (frontLeftInches * COUNTS_PER_INCH);
+            newBackRightTarget = robot.backRight.getCurrentPosition() + (int) (backRightInches * COUNTS_PER_INCH);
+            newBackLeftTarget = robot.backLeft.getCurrentPosition() + (int) (backLeftInches * COUNTS_PER_INCH);
+
+            robot.frontRight.setTargetPosition(newFrontRightTarget);
+            robot.frontLeft.setTargetPosition(newFrontLeftTarget);
+            robot.backRight.setTargetPosition(newBackRightTarget);
+            robot.backLeft.setTargetPosition(newBackLeftTarget);
+            // Turn On RUN_TO_POSITION
+            robot.frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            // reset the timeout time and start motion.
+            runtime.reset();
+            robot.frontRight.setPower(Math.abs(speed));
+            robot.frontLeft.setPower(Math.abs(speed));
+            robot.backRight.setPower(Math.abs(speed));
+            robot.backLeft.setPower(Math.abs(speed));
+
+
+            while (opModeIsActive() &&
+                    (runtime.seconds() < timeoutS) &&
+                    (robot.frontRight.isBusy() && robot.frontLeft.isBusy() && robot.backRight.isBusy() && robot.backLeft.isBusy())) {
+
+                // Display it for the driver.
+                encoderProjected.setValue("Running to %7d :%7d :%7d :%7d", newFrontRightTarget, newFrontLeftTarget,
+                        newBackRightTarget, newBackLeftTarget);
+                encoderCurrent.setValue("Running at %7d :%7d :%7d :%7d",
+                        robot.frontRight.getCurrentPosition(),
+                        robot.frontLeft.getCurrentPosition(),
+                        robot.backRight.getCurrentPosition(),
+                        robot.backLeft.getCurrentPosition());
+                telemetry.update();
+            }
+
+            // Stop all motion;
+            robot.frontRight.setPower(0);
+            robot.frontLeft.setPower(0);
+            robot.backRight.setPower(0);
+            robot.backLeft.setPower(0);
+
+            // Turn off RUN_TO_POSITION
+            robot.frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        }
     }
 }
