@@ -16,9 +16,9 @@ import org.firstinspires.ftc.teamcode.Libraries.FireBot;
 public class FinalTeleOp extends OpMode {
 
     /* Declare OpMode members. */
-
-    private FireBot firebot = new FireBot();
     private Hardware robot = new Hardware();
+    private FireBot firebot = new FireBot();
+
 
     /* TeleOp Initialization */
     @Override
@@ -44,8 +44,8 @@ public class FinalTeleOp extends OpMode {
 
         //Joystick intialization and conditioning
         //original configuration: db: 0 , off: 0.05 , gain: 0.9
-        double gamepad2LeftY = firebot.joystick_conditioning(gamepad2.left_stick_y, 0, 0.05, 0.9);
-        double intakeAdjustPower = firebot.gamepad_conditioning(gamepad2.right_stick_y, 0, 0.05, 0.9);
+        double gamepad2LeftY = firebot.joystick_conditioning(gamepad2.left_stick_y, 0, 0.05, 0.95);
+        double intakeAdjustPower = firebot.gamepad_conditioning(gamepad2.right_stick_y, 0, 0.05, 0.95);
 
         //Trigger initialization and conditioning
         double gamepad1RightTrigger = gamepad1.right_trigger;
@@ -74,7 +74,7 @@ public class FinalTeleOp extends OpMode {
         double backRightPower = 0; //Back Right motor power
 
         //If statement to prevent power from being sent to the same motor from multiple sources
-        if (!dpadUp && !dpadDown && gamepad1LeftTrigger == 0 && gamepad1RightTrigger == 0) {
+        if (!dpadUp && !dpadDown) {
             //Calculating Mecanum power
             frontLeftPower = yMove - xMove - cMove;
             frontRightPower = -yMove - xMove - cMove;
@@ -89,10 +89,10 @@ public class FinalTeleOp extends OpMode {
             backRightPower = Range.clip(backRightPower, -maxPower, maxPower);
 
             //Setting power to Mecanum drivetrain
-            robot.frontLeft.setPower(frontLeftPower);
-            robot.frontRight.setPower(frontRightPower);
-            robot.backLeft.setPower(backLeftPower);
-            robot.backRight.setPower(backRightPower);
+            robot.frontLeft.setPower(-frontLeftPower);
+            robot.frontRight.setPower(-frontRightPower);
+            robot.backLeft.setPower(-backLeftPower);
+            robot.backRight.setPower(-backRightPower);
         }
 
         //Alternative inputs active for drive
@@ -162,7 +162,25 @@ public class FinalTeleOp extends OpMode {
 
         }
 
+        if(gamepad1.a)
+        {
+            robot.frontRight.setPower(0.4);
+        }
 
+        if(gamepad1.b)
+        {
+            robot.frontLeft.setPower(0.4);
+        }
+
+        if(gamepad1.y)
+        {
+            robot.backRight.setPower(0.4);
+        }
+
+        if(gamepad1.x)
+        {
+            robot.backLeft.setPower(0.4);
+        }
 
 
 
@@ -170,8 +188,10 @@ public class FinalTeleOp extends OpMode {
         // intake = gamepad2RightTrigger;
         // outtake = -gamepad2LeftTrigger;
 
-        robot.intakeElevator.setPower(gamepad2LeftY);
-        robot.intakeAdjust.setPower(intakeAdjustPower);
+        robot.intakeElevator.setPower(-gamepad2LeftY * 0.7);
+        robot.intakeAdjust.setPower(intakeAdjustPower * 0.5);
+
+
 
         //Setting power to intake
         //Contingency against loop error
@@ -184,11 +204,6 @@ public class FinalTeleOp extends OpMode {
 
         }
 
-        if(frontRightPower > 0 && backRightPower > 0)
-        {
-            robot.ledLights.setPower(frontRightPower * 1.4);
-        }
-        else { robot.ledLights.setPower(0.75); }
 
 
 
@@ -201,7 +216,7 @@ public class FinalTeleOp extends OpMode {
 
     public void stop(){
 
-        robot.ledLights.setPower(0);
+
     }
 
     /* // If we aren't moving right now check for "brake mode" to hold position
