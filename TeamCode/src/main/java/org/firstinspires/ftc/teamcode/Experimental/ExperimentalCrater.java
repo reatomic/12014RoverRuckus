@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.Locale;
 
 @Autonomous(name = "Experimental Crater", group = "Coldbot")
-
+@Disabled
 public class ExperimentalCrater extends LinearOpMode
 {
 
@@ -578,7 +578,7 @@ public class ExperimentalCrater extends LinearOpMode
         encoderDrive(spd, -turn, turn, 5.0);
         sleep(200);
     }
-//
+    //
 //    public void strafeLeft(double spd, double strafe, double angle){
 //        strafeDrive(spd, strafe, angle, 'L');
 //
