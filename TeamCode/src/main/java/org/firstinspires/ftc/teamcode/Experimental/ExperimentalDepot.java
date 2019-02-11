@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.Locale;
 
 @Autonomous(name = "Experimental Depot", group = "Coldbot")
-
+@Disabled
 public class ExperimentalDepot extends LinearOpMode
 {
 
@@ -134,7 +134,7 @@ public class ExperimentalDepot extends LinearOpMode
         // Wait until we're told to go
         waitForStart();
         /* Step 1: Lower Robot */
-        lowerRobot();
+//        lowerRobot();
 
         if (opModeIsActive()) {
             /* Activate Tensor Flow Object Detection. */
