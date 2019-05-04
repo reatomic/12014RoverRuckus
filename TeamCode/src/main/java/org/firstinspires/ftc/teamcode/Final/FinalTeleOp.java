@@ -26,6 +26,10 @@ public class FinalTeleOp extends OpMode {
 
         robot.init(hardwareMap);
         robot.hangElevator.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
     /* Start loop for TeleOp */
@@ -62,9 +66,12 @@ public class FinalTeleOp extends OpMode {
         boolean dpadUp2 = gamepad2.dpad_up;
         boolean dpadDown2 = gamepad2.dpad_down;
 
+        boolean rightBumper2 = gamepad2.right_bumper;
+        boolean leftBumper2 = gamepad2.left_bumper;
+        rightBumper2 = false;
 
         //Mecanum values
-        double maxPower = 0.725; //Maximum power for power range
+        double maxPower = .82; //Maximum power for power range
         double yMove = firebot.joystick_conditioning(gamepad1.left_stick_y, 0, 0.05, 0.9);
         double xMove = firebot.joystick_conditioning(gamepad1.left_stick_x, 0, 0.05, 0.9);
         double cMove = firebot.joystick_conditioning(gamepad1.right_stick_x, 0, 0.05, 0.9);
@@ -95,6 +102,7 @@ public class FinalTeleOp extends OpMode {
             robot.backRight.setPower(-backRightPower);
         }
 
+        /*((x - 1.5)^3 + 1.5(x - 1.5)^2) + 0.5) D(0 , 1.5] Max/n = 1.5 */
         //Alternative inputs active for drive
         else {
             //Strafe left
@@ -146,13 +154,6 @@ public class FinalTeleOp extends OpMode {
             }
         }
 
-//        if (dpadUp2 || dpadDown2){
-//            if (dpadUp2){ robot.hangElevator.setPower(0.8); }
-//            if (dpadDown2){ robot.hangElevator.setPower(-0.8); }
-//        }
-//
-//        else { robot.hangElevator.setPower(0); }
-//
         if (gamepad1RightTrigger > 0){
             robot.hangElevator.setPower(-gamepad1RightTrigger);
 
@@ -190,7 +191,13 @@ public class FinalTeleOp extends OpMode {
 
         robot.intakeElevator.setPower(-gamepad2LeftY * 0.7);
         robot.intakeAdjust.setPower(intakeAdjustPower * 0.5);
-
+//        if(rightBumper2){
+//
+//            robot.intakeAdjust.setPower(Math.pow((robot.intakeAdjust.getCurrentPosition() - 1.5) , 3) + 1.5 * Math.pow((robot.intakeAdjust.getCurrentPosition() - 1.5) , 2) + 0.5);
+//
+//        }
+//        else{robot.intakeAdjust.setPower(intakeAdjustPower * 0.5);}
+//
 
 
         //Setting power to intake
@@ -209,7 +216,15 @@ public class FinalTeleOp extends OpMode {
 
         //Find encoder ticks for hang
         robot.hangElevator.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         telemetry.addData("Current Hang Position", robot.hangElevator.getCurrentPosition());
+        telemetry.addData("Front Right", robot.frontRight.getCurrentPosition());
+        telemetry.addData("Front Left", robot.frontLeft.getCurrentPosition());
+        telemetry.addData("Back Right", robot.backRight.getCurrentPosition());
+        telemetry.addData("Back Left", robot.backLeft.getCurrentPosition());
         telemetry.update();
 
     }
